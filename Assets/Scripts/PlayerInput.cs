@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System;
 using UnityEngine;
 
 public class PInpuy : MonoBehaviour
@@ -32,5 +33,8 @@ public class PInpuy : MonoBehaviour
             movement.ToggleFly();
         }
         */
+    }
+    public void clickimage(){
+        Debug.Log ("Clicked card");
     }
 }

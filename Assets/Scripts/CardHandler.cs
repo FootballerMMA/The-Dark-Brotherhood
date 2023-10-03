@@ -5,10 +5,7 @@ using UnityEngine;
 
 public class CardHandler : MonoBehaviour
 {
-    void Start(){
-        Console.WriteLine("Started");
-    }
     public void clickimage(){
-        Console.WriteLine("Clicked on card");
+        Debug.Log ("Clicked card");
     }
 }
