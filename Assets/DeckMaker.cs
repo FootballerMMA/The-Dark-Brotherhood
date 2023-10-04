@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class DeckMaker : MonoBehaviour
 {
+    /*
     [SerializeField] Sprite snowSprite;
     [SerializeField] Sprite fireSprite;
     [SerializeField] Sprite waterSprite;
@@ -53,5 +54,5 @@ public class DeckMaker : MonoBehaviour
             }
         }
     }
-
+    */
 }

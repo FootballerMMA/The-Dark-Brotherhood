@@ -1,5 +1,5 @@
 using System;
-class JitsuCard {
+public class JitsuCard {
     public int element; // 0 is snow 1 is fire 2 is water
     public int attackLevel;
     bool drawnToDeck;
