@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
@@ -128,14 +129,13 @@ public class BattleSystem : MonoBehaviour
     void checkGameEnd(){
         if (checkGameWinner(0)){ // check if user won
             state = BattleState.WON;
-            EndBattle();
+            StartCoroutine(EndBattle());
         } else if (checkGameWinner(1)){ // check if enemy won
             state = BattleState.LOST;
-            EndBattle();
+            StartCoroutine(EndBattle());
         } else {
             state = BattleState.PLAYERTURN;
             updateCards();
-            //deck.printHAQ();
             PlayerTurn();
         }
     }
@@ -206,12 +206,14 @@ public class BattleSystem : MonoBehaviour
                 break;
         }
     }
-    void EndBattle(){
+    IEnumerator EndBattle(){
         if (state == BattleState.WON){
             dialogueText.text = "Congratulations you won!";
         } else if (state == BattleState.LOST) {
             dialogueText.text = "Womp womp, you lost !";
         }
+        yield return new WaitForSeconds(4f);
+        SceneManager.LoadScene("MainMenuScene");
     }
     void PlayerTurn(){
         dialogueText.text = "Choose an attack!";
