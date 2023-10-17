@@ -46,6 +46,25 @@ public class BattleSystem : MonoBehaviour
         cardTexts.setCardLevels();
     }
     void UpdateDialogueText(string s) { dialogueText.text = s; }
+    string CreateAttackString(JitsuCard card, bool isPlayer)
+    {
+        string s = isPlayer ? "Chosen level " : "Enemy counters with a ";
+        s += card.attackLevel + " ";
+        switch(card.element)
+        {
+            case 0:
+                s += "snow";
+                break;
+            case 1:
+                s += "fire";
+                break;
+            case 2:
+                s += "water";
+                break;
+        }
+        s += " attack!";
+        return s;
+    }
     IEnumerator SetupBattle()
     {
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
@@ -66,24 +85,17 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
-    string CreateAttackString(JitsuCard card, bool isPlayer)
+    void PlayerTurn() { UpdateDialogueText("Choose an attack!"); }
+    public void Card0() { OnCardButton(0); }
+    public void Card1() { OnCardButton(1); }
+    public void Card2() { OnCardButton(2); }
+    public void Card3() { OnCardButton(3); }
+    public void Card4() { OnCardButton(4); }
+    public void OnCardButton(int cardIndex)
     {
-        string s = isPlayer ? "Chosen level " : "Enemy counters with a ";
-        s += card.attackLevel + " ";
-        switch(card.element)
-        {
-            case 0:
-                s += "snow";
-                break;
-            case 1:
-                s += "fire";
-                break;
-            case 2:
-                s += "water";
-                break;
-        }
-        s += " attack!";
-        return s;
+        if (state != BattleState.PLAYERTURN)
+            return;
+        StartCoroutine(PlayerAttack(cardIndex));
     }
     IEnumerator PlayerAttack(int cardIndex)
     {
@@ -109,6 +121,39 @@ public class BattleSystem : MonoBehaviour
         int cardIndex = rnd.Next(0, 5);
         JitsuCard enemyCard = enemyDeck.chooseCard(cardIndex);
         return enemyCard;
+    }
+    void checkWinner(JitsuCard playerCard, JitsuCard enemyCard){
+        int playerElement = playerCard.element;
+        int enemyElement = enemyCard.element;
+        int determinator = playerElement - enemyElement;
+        int determinator2 = playerCard.attackLevel - enemyCard.attackLevel;
+        int outcome = 0;
+        switch (determinator)
+        {
+            case -2:
+            case 1:
+                playerHUD.addAttack(playerElement);
+                dialogueText.text = "Your element overpowers his!";
+                outcome = 1;
+                break;
+            case -1:
+            case 2:
+                enemyHUD.addAttack(enemyElement);
+                dialogueText.text = "Your element was overpowered!";
+                outcome = -1;
+                break;
+            case 0:
+                outcome = checkLevelDifference(determinator2, playerCard, enemyCard);
+                break;
+        }
+        switch (outcome){
+            case -1:
+                enemyUnit.increaseElementAttack(enemyElement);
+                break;
+            case 1:
+                playerUnit.increaseElementAttack(playerElement);
+                break;
+        }
     }
     int checkLevelDifference(int difference, JitsuCard playerCard, JitsuCard enemyCard){
         int playerElement = playerCard.element;
@@ -166,39 +211,6 @@ public class BattleSystem : MonoBehaviour
         }
         return false;
     }
-    void checkWinner(JitsuCard playerCard, JitsuCard enemyCard){
-        int playerElement = playerCard.element;
-        int enemyElement = enemyCard.element;
-        int determinator = playerElement - enemyElement;
-        int determinator2 = playerCard.attackLevel - enemyCard.attackLevel;
-        int outcome = 0;
-        switch (determinator)
-        {
-            case -2:
-            case 1:
-                playerHUD.addAttack(playerElement);
-                dialogueText.text = "Your element overpowers his!";
-                outcome = 1;
-                break;
-            case -1:
-            case 2:
-                enemyHUD.addAttack(enemyElement);
-                dialogueText.text = "Your element was overpowered!";
-                outcome = -1;
-                break;
-            case 0:
-                outcome = checkLevelDifference(determinator2, playerCard, enemyCard);
-                break;
-        }
-        switch (outcome){
-            case -1:
-                enemyUnit.increaseElementAttack(enemyElement);
-                break;
-            case 1:
-                playerUnit.increaseElementAttack(playerElement);
-                break;
-        }
-    }
     IEnumerator EndBattle(){
         if (state == BattleState.WON){
             UpdateDialogueText("Congratulations you won!");
@@ -208,16 +220,4 @@ public class BattleSystem : MonoBehaviour
         yield return new WaitForSeconds(4f);
         SceneManager.LoadScene("MainMenuScene");
     }
-    void PlayerTurn() { UpdateDialogueText("Choose an attack!"); }
-    public void OnCardButton(int cardIndex)
-    {
-        if (state != BattleState.PLAYERTURN)
-            return;
-        StartCoroutine(PlayerAttack(cardIndex));
-    }
-    public void Card0() { OnCardButton(0); }
-    public void Card1() { OnCardButton(1); }
-    public void Card2() { OnCardButton(2); }
-    public void Card3() { OnCardButton(3); }
-    public void Card4() { OnCardButton(4); }
 }
