@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
 
-
 public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
@@ -36,16 +35,19 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.START;
         StartCoroutine(SetupBattle());
     }
-    void getJitsuDeck(){
+    void getJitsuDeck()
+    {
         deck = JitsuDeckSingleton.Instance.GetDeck();
-        //deck.printHAQ();
         enemyDeck = JitsuDeckSingleton.Instance.GetEnemyDeck();
     }
-    void updateCards(){
+    void updateCards()
+    {
         cardSprites.setImageSprites();
         cardTexts.setCardLevels();
     }
-    IEnumerator SetupBattle(){
+    void UpdateDialogueText(string s) { dialogueText.text = s; }
+    IEnumerator SetupBattle()
+    {
         GameObject playerGO = Instantiate(playerPrefab, playerBattleStation);
         playerUnit = playerGO.GetComponent<unitInformation>();
 
@@ -55,7 +57,7 @@ public class BattleSystem : MonoBehaviour
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
 
-        dialogueText.text = "A battle ensues!";
+        UpdateDialogueText("A battle ensues!");
 
         getJitsuDeck();
 
@@ -64,33 +66,11 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PLAYERTURN;
         PlayerTurn();
     }
-    IEnumerator PlayerAttack(int cardIndex){
-        state = BattleState.ENEMYTURN;
-        JitsuCard playerCard = deck.chooseCard(cardIndex);
-        string s = "Chosen level " + playerCard.attackLevel + " ";
-        switch(playerCard.element)
-        {
-            case 0:
-                s += "snow";
-                break;
-            case 1:
-                s += "fire";
-                break;
-            case 2:
-                s += "water";
-                break;
-        }
-        s+= " attack!";
-        dialogueText.text = s;
-        yield return new WaitForSeconds(2f);
-        StartCoroutine(EnemyTurn(playerCard));
-    }
-    IEnumerator EnemyTurn(JitsuCard playerCard){
-        string s = "Enemy counters with a ";
-        int cardIndex = rnd.Next(0, 5);
-        JitsuCard enemyCard = enemyDeck.chooseCard(cardIndex);
-        s+= "level " + enemyCard.attackLevel + " ";
-        switch(enemyCard.element)
+    string CreateAttackString(JitsuCard card, bool isPlayer)
+    {
+        string s = isPlayer ? "Chosen level " : "Enemy counters with a ";
+        s += card.attackLevel + " ";
+        switch(card.element)
         {
             case 0:
                 s += "snow";
@@ -103,11 +83,32 @@ public class BattleSystem : MonoBehaviour
                 break;
         }
         s += " attack!";
-        dialogueText.text = s;
+        return s;
+    }
+    IEnumerator PlayerAttack(int cardIndex)
+    {
+        state = BattleState.ENEMYTURN;
+        JitsuCard playerCard = deck.chooseCard(cardIndex);
+        string s = CreateAttackString(playerCard, true);
+        UpdateDialogueText(s);
+        yield return new WaitForSeconds(2f);
+        StartCoroutine(EnemyTurn(playerCard));
+    }
+    IEnumerator EnemyTurn(JitsuCard playerCard)
+    {
+        JitsuCard enemyCard = AIChooseRandomCard();
+        string s = CreateAttackString(enemyCard, false);
+        UpdateDialogueText(s);
         yield return new WaitForSeconds(2f);
         checkWinner(playerCard, enemyCard);
         yield return new WaitForSeconds(2f);
         checkGameEnd();
+    }
+    JitsuCard AIChooseRandomCard()
+    {
+        int cardIndex = rnd.Next(0, 5);
+        JitsuCard enemyCard = enemyDeck.chooseCard(cardIndex);
+        return enemyCard;
     }
     int checkLevelDifference(int difference, JitsuCard playerCard, JitsuCard enemyCard){
         int playerElement = playerCard.element;
@@ -125,18 +126,22 @@ public class BattleSystem : MonoBehaviour
             return 0; // you tied
         }
     }
-    
-    void checkGameEnd(){
-        if (checkGameWinner(0)){ // check if user won
-            state = BattleState.WON;
-            StartCoroutine(EndBattle());
-        } else if (checkGameWinner(1)){ // check if enemy won
-            state = BattleState.LOST;
-            StartCoroutine(EndBattle());
-        } else {
-            state = BattleState.PLAYERTURN;
-            updateCards();
-            PlayerTurn();
+    void checkGameEnd() 
+    {
+        switch(checkGameWinner()) {
+            case 0: // user won
+                state = BattleState.WON;
+                StartCoroutine(EndBattle());
+                break;
+            case 1: // enemy won
+                state = BattleState.LOST;
+                StartCoroutine(EndBattle());
+                break;
+            default:
+                state = BattleState.PLAYERTURN;
+                updateCards();
+                PlayerTurn();
+                break;
         }
     }
     bool checkGameWinner(int specifier){
@@ -155,13 +160,8 @@ public class BattleSystem : MonoBehaviour
         int snowAttacks = temp.getSnowAttacks();
         int fireAttacks = temp.getFireAttacks();
         int waterAttacks = temp.getWaterAttacks();
-        if (snowAttacks == 3){
-            return true;
-        } else if (fireAttacks == 3){
-            return true;
-        } else if (waterAttacks == 3){
-            return true;
-        } else if (fireAttacks >= 1 && snowAttacks >= 1 && waterAttacks >= 1){
+        if (snowAttacks == 3 || fireAttacks == 3 || waterAttacks == 3
+            || (fireAttacks >= 1 && snowAttacks >= 1 && waterAttacks >= 1)) {
             return true;
         }
         return false;
@@ -172,29 +172,22 @@ public class BattleSystem : MonoBehaviour
         int determinator = playerElement - enemyElement;
         int determinator2 = playerCard.attackLevel - enemyCard.attackLevel;
         int outcome = 0;
-        switch (determinator){
+        switch (determinator)
+        {
             case -2:
+            case 1:
                 playerHUD.addAttack(playerElement);
                 dialogueText.text = "Your element overpowers his!";
                 outcome = 1;
                 break;
             case -1:
+            case 2:
                 enemyHUD.addAttack(enemyElement);
                 dialogueText.text = "Your element was overpowered!";
                 outcome = -1;
                 break;
             case 0:
                 outcome = checkLevelDifference(determinator2, playerCard, enemyCard);
-                break;
-            case 1:
-                playerHUD.addAttack(playerElement);
-                dialogueText.text = "Your element overpowers his!";
-                outcome = 1;
-                break;
-            case 2:
-                enemyHUD.addAttack(enemyElement);
-                dialogueText.text = "Your element was overpowered!";
-                outcome = -1;
                 break;
         }
         switch (outcome){
@@ -208,40 +201,23 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator EndBattle(){
         if (state == BattleState.WON){
-            dialogueText.text = "Congratulations you won!";
+            UpdateDialogueText("Congratulations you won!");
         } else if (state == BattleState.LOST) {
-            dialogueText.text = "Womp womp, you lost !";
+            UpdateDialogueText("Womp womp, you lost !");
         }
         yield return new WaitForSeconds(4f);
         SceneManager.LoadScene("MainMenuScene");
     }
-    void PlayerTurn(){
-        dialogueText.text = "Choose an attack!";
-    }
-
-    public void OnCard0Button(){
+    void PlayerTurn() { UpdateDialogueText("Choose an attack!"); }
+    public void OnCardButton(int cardIndex)
+    {
         if (state != BattleState.PLAYERTURN)
             return;
-        StartCoroutine(PlayerAttack(0));
+        StartCoroutine(PlayerAttack(cardIndex));
     }
-    public void OnCard1Button(){
-        if (state != BattleState.PLAYERTURN)
-            return;
-        StartCoroutine(PlayerAttack(1));
-    }
-    public void OnCard2Button(){
-        if (state != BattleState.PLAYERTURN)
-            return;
-        StartCoroutine(PlayerAttack(2));
-    }
-    public void OnCard3Button(){
-        if (state != BattleState.PLAYERTURN)
-            return;
-        StartCoroutine(PlayerAttack(3));
-    }
-    public void OnCard4Button(){
-        if (state != BattleState.PLAYERTURN)
-            return;
-        StartCoroutine(PlayerAttack(4));
-    }
+    public void Card0() { OnCardButton(0); }
+    public void Card1() { OnCardButton(1); }
+    public void Card2() { OnCardButton(2); }
+    public void Card3() { OnCardButton(3); }
+    public void Card4() { OnCardButton(4); }
 }
