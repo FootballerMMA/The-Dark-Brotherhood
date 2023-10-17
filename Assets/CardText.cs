@@ -35,7 +35,7 @@ public class CardText : MonoBehaviour
         cardTexts[8] = card4Up;
         cardTexts[9] = card4Down;
     }
-    private void setCardLevels(){
+    public void setCardLevels(){
         JitsuDeck deck = JitsuDeckSingleton.Instance.GetDeck();
         int x = 0;
         for (int i = 0; i < 10; i += 2, x++)

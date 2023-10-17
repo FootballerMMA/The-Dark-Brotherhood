@@ -31,7 +31,7 @@ public class CardSprite : MonoBehaviour
         setImageSprites();
     }
 
-    private void setImageSprites()
+    public void setImageSprites()
     {
         JitsuDeck deck = JitsuDeckSingleton.Instance.GetDeck();
 

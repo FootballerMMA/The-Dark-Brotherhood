@@ -6,6 +6,7 @@ public class JitsuDeckSingleton : MonoBehaviour
 {
     private static JitsuDeckSingleton instance;
     private JitsuDeck deck;
+    private JitsuDeck enemyDeck;
 
     private void Awake()
     {
@@ -15,6 +16,7 @@ public class JitsuDeckSingleton : MonoBehaviour
             //DontDestroyOnLoad(gameObject);
 
             deck = new JitsuDeck();
+            enemyDeck = new JitsuDeck();
         }
         else
         {
@@ -38,5 +40,9 @@ public class JitsuDeckSingleton : MonoBehaviour
     public JitsuDeck GetDeck()
     {
         return deck;
+    }
+    public JitsuDeck GetEnemyDeck()
+    {
+        return enemyDeck;
     }
 }

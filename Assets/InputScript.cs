@@ -4,7 +4,4 @@ using UnityEngine;
 
 public class InputScript : MonoBehaviour
 {
-    public void print(){
-        Debug.Log("Hi");
-    }
 }

@@ -133,6 +133,12 @@ public class JitsuDeck
         return cardChosen;
     }
 
+    public JitsuCard getCardDetails(int index)
+    {
+        JitsuCard cardChosen = hand[index];
+        return cardChosen;
+    }
+
     private JitsuCard popHeadQueue()
     {
         JitsuCard card = queue[0];
