@@ -29,6 +29,8 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] CardSprite cardSprites;
     [SerializeField] CardText cardTexts;
 
+    [SerializeField] SoundManager soundSystem;
+
     System.Random rnd = new System.Random();
     void Start()
     {
@@ -75,12 +77,12 @@ public class BattleSystem : MonoBehaviour
         
         playerHUD.SetHUD(playerUnit);
         enemyHUD.SetHUD(enemyUnit);
-
+        soundSystem.PlayEntranceMusic();
         UpdateDialogueText("A battle ensues!");
 
         getJitsuDeck();
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(6f);
 
         state = BattleState.PLAYERTURN;
         PlayerTurn();
@@ -95,6 +97,7 @@ public class BattleSystem : MonoBehaviour
     {
         if (state != BattleState.PLAYERTURN)
             return;
+        soundSystem.PlayCardPickedSound();
         StartCoroutine(PlayerAttack(cardIndex));
     }
     IEnumerator PlayerAttack(int cardIndex)
@@ -133,12 +136,14 @@ public class BattleSystem : MonoBehaviour
             case -2:
             case 1:
                 playerHUD.addAttack(playerElement);
+                soundSystem.PlayElementSound(playerElement);
                 dialogueText.text = "Your element overpowers his!";
                 outcome = 1;
                 break;
             case -1:
             case 2:
                 enemyHUD.addAttack(enemyElement);
+                soundSystem.PlayElementSound(enemyElement);
                 dialogueText.text = "Your element was overpowered!";
                 outcome = -1;
                 break;
@@ -160,33 +165,32 @@ public class BattleSystem : MonoBehaviour
         int enemyElement = enemyCard.element;
         if (difference < 0){
             enemyHUD.addAttack(enemyElement);
+            soundSystem.PlayElementSound(enemyElement);
             dialogueText.text = "Your element was overpowered!";
             return -1; // you lost
         } else if (difference > 0) {
             playerHUD.addAttack(playerElement);
+            soundSystem.PlayElementSound(playerElement);
             dialogueText.text = "Your element overpowers his!";
             return 1; // you won
         } else {
+            soundSystem.PlayElementsCancelSound();
             dialogueText.text = "Your attacks cancel eachother out!";
             return 0; // you tied
         }
     }
     void checkGameEnd() 
     {
-        switch(checkGameWinner()) {
-            case 0: // user won
-                state = BattleState.WON;
-                StartCoroutine(EndBattle());
-                break;
-            case 1: // enemy won
-                state = BattleState.LOST;
-                StartCoroutine(EndBattle());
-                break;
-            default:
-                state = BattleState.PLAYERTURN;
-                updateCards();
-                PlayerTurn();
-                break;
+        if (checkGameWinner(0)){ // check if user won
+            state = BattleState.WON;
+            StartCoroutine(EndBattle());
+        } else if (checkGameWinner(1)){ // check if enemy won
+            state = BattleState.LOST;
+            StartCoroutine(EndBattle());
+        } else {
+            state = BattleState.PLAYERTURN;
+            updateCards();
+            PlayerTurn();
         }
     }
     bool checkGameWinner(int specifier){
@@ -213,8 +217,10 @@ public class BattleSystem : MonoBehaviour
     }
     IEnumerator EndBattle(){
         if (state == BattleState.WON){
+            soundSystem.PlayGameWinnerSound();
             UpdateDialogueText("Congratulations you won!");
         } else if (state == BattleState.LOST) {
+            soundSystem.PlayGameLoserSound();
             UpdateDialogueText("Womp womp, you lost !");
         }
         yield return new WaitForSeconds(4f);
