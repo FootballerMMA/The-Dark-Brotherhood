@@ -31,6 +31,9 @@ public class BattleSystem : MonoBehaviour
 
     [SerializeField] SoundManager soundSystem;
 
+    [SerializeField] CardsSelected cardSelectedSystem;
+    [SerializeField] randomscript rs;
+
     System.Random rnd = new System.Random();
     void Start()
     {
@@ -79,13 +82,15 @@ public class BattleSystem : MonoBehaviour
         enemyHUD.SetHUD(enemyUnit);
         soundSystem.PlayEntranceMusic();
         UpdateDialogueText("A battle ensues!");
-
         getJitsuDeck();
-
         yield return new WaitForSeconds(6f);
 
-        state = BattleState.PLAYERTURN;
         PlayerTurn();
+        yield return new WaitForSeconds(1f);
+        state = BattleState.PLAYERTURN;
+        updateCards();
+        soundSystem.PlayCardRevealSound();
+        rs.SpawnCard();
     }
     void PlayerTurn() { UpdateDialogueText("Choose an attack!"); }
     public void Card0() { OnCardButton(0); }
@@ -106,6 +111,7 @@ public class BattleSystem : MonoBehaviour
         JitsuCard playerCard = deck.chooseCard(cardIndex);
         string s = CreateAttackString(playerCard, true);
         UpdateDialogueText(s);
+        cardSelectedSystem.SpawnPlayerCard(playerCard);
         yield return new WaitForSeconds(2f);
         StartCoroutine(EnemyTurn(playerCard));
     }
@@ -114,6 +120,7 @@ public class BattleSystem : MonoBehaviour
         JitsuCard enemyCard = AIChooseRandomCard();
         string s = CreateAttackString(enemyCard, false);
         UpdateDialogueText(s);
+        cardSelectedSystem.SpawnEnemyCard(enemyCard);
         yield return new WaitForSeconds(2f);
         checkWinner(playerCard, enemyCard);
         yield return new WaitForSeconds(2f);

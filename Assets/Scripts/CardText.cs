@@ -21,7 +21,7 @@ public class CardText : MonoBehaviour
     private void Start()
     {
         setArray();
-        setCardLevels();
+        //setCardLevels();
     }
     private void setArray(){
         cardTexts[0] = card0Up;

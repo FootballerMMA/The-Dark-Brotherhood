@@ -339,6 +339,8 @@ GameObject:
   - component: {fileID: 330687265}
   - component: {fileID: 330687264}
   - component: {fileID: 330687263}
+  - component: {fileID: 330687266}
+  - component: {fileID: 330687267}
   m_Layer: 0
   m_Name: BattleSystem
   m_TagString: Untagged
@@ -369,6 +371,8 @@ MonoBehaviour:
   cardSprites: {fileID: 330687263}
   cardTexts: {fileID: 330687264}
   soundSystem: {fileID: 1208368969}
+  cardSelectedSystem: {fileID: 330687266}
+  rs: {fileID: 330687267}
 --- !u!4 &330687262
 Transform:
   m_ObjectHideFlags: 0
@@ -404,6 +408,7 @@ MonoBehaviour:
   snowSprite: {fileID: 21300000, guid: c86b745363d72f946975c73474d8cc3b, type: 3}
   fireSprite: {fileID: 21300000, guid: c7b72bfe8e4eee94d803992545527b5a, type: 3}
   waterSprite: {fileID: 21300000, guid: 4bc52d2221d50d845a92ceb5a58e4c69, type: 3}
+  cardBackSprite: {fileID: 21300000, guid: 8337af86ef48e40419eebde23cde21fc, type: 3}
 --- !u!114 &330687264
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -438,6 +443,36 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 18f442c30251ac049ac71b8f23961b78, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &330687266
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330687260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e1195adab03e6bd4da14d918317239f5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  snowSprite: {fileID: 21300000, guid: c86b745363d72f946975c73474d8cc3b, type: 3}
+  fireSprite: {fileID: 21300000, guid: c7b72bfe8e4eee94d803992545527b5a, type: 3}
+  waterSprite: {fileID: 21300000, guid: 4bc52d2221d50d845a92ceb5a58e4c69, type: 3}
+  cardBackSprite: {fileID: 21300000, guid: 8337af86ef48e40419eebde23cde21fc, type: 3}
+--- !u!114 &330687267
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 330687260}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c658e0fa42633ff4f94237e4baeace15, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cardSprite: {fileID: 21300000, guid: 4bc52d2221d50d845a92ceb5a58e4c69, type: 3}
+  spawnDuration: 2
 --- !u!1 &370479596
 GameObject:
   m_ObjectHideFlags: 0
@@ -651,7 +686,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.36819148, g: 0.5943396, b: 0.5943396, a: 0}
+  m_BackGroundColor: {r: 0.17888924, g: 0.4245283, b: 0.4245283, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1120,6 +1155,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203232509}
     m_Modifications:
+    - target: {fileID: 3138275681370380872, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284465120219586122, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5543463276940035323, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
       propertyPath: m_Name
       value: card4
@@ -1212,7 +1255,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117447705551005984, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1646,6 +1690,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203232509}
     m_Modifications:
+    - target: {fileID: 3138275681370380872, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284465120219586122, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5543463276940035323, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
       propertyPath: m_Name
       value: card2
@@ -1738,7 +1790,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117447705551005984, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -1751,6 +1804,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203232509}
     m_Modifications:
+    - target: {fileID: 3138275681370380872, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284465120219586122, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5543463276940035323, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
       propertyPath: m_Name
       value: card3
@@ -1843,7 +1904,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117447705551005984, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3600,6 +3662,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203232509}
     m_Modifications:
+    - target: {fileID: 3138275681370380872, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284465120219586122, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5543463276940035323, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
       propertyPath: m_Name
       value: card1
@@ -3692,7 +3762,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117447705551005984, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
@@ -3716,6 +3787,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 203232509}
     m_Modifications:
+    - target: {fileID: 3138275681370380872, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 5284465120219586122, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
+      propertyPath: m_Text
+      value: 
+      objectReference: {fileID: 0}
     - target: {fileID: 5543463276940035323, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
       propertyPath: m_Name
       value: card0
@@ -3808,7 +3887,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 8117447705551005984, guid: 02ca2690a936205478f7ce2d0444a4c4, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []

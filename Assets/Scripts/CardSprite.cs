@@ -13,7 +13,7 @@ public class CardSprite : MonoBehaviour
     [SerializeField] private Sprite snowSprite;
     [SerializeField] private Sprite fireSprite;
     [SerializeField] private Sprite waterSprite;
-
+    [SerializeField] private Sprite cardBackSprite;
     private Image[] cardImages;
 
     private void Awake()
@@ -28,9 +28,15 @@ public class CardSprite : MonoBehaviour
 
     private void Start()
     {
-        setImageSprites();
+        setCardDeckFlipped();
     }
-
+    public void setCardDeckFlipped()
+    {
+        for (int i = 0; i < 5; i++)
+        {
+            cardImages[i].sprite = cardBackSprite;
+        }
+    }
     public void setImageSprites()
     {
         JitsuDeck deck = JitsuDeckSingleton.Instance.GetDeck();
