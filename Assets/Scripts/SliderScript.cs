@@ -13,17 +13,30 @@ public class SliderScript : MonoBehaviour
 
     void Start(){
         float savedVolume;
-        if (PlayerPrefs.GetInt("Default Volume Changed") == 0){
-            savedVolume = 0.1f;
+        //float volume;
+        if (!PlayerPrefs.HasKey("Default Volume Changed")){
+            Debug.Log("No key!");
+            savedVolume = -80.0f;
             PlayerPrefs.SetInt("Default Volume Changed", 1);
         } else {
+            Debug.Log("Key");
             savedVolume = PlayerPrefs.GetFloat("Master");
             float retrievedValue = Mathf.Pow(10, savedVolume / 20);
+            //Debug.Log("Receiving this saved " + savedVolume + " turned into " + retrievedValue);
+            //slideThing.value = savedVolume;
             slideThing.value = retrievedValue;
             volumeLevel.text = handle.anchorMin.x.ToString();
-            SetVolume("Master", savedVolume);
-            SetVolume("Music", savedVolume);
         }
+        SetVolume("Master", savedVolume);
+        /*
+        if (PlayerPrefs.HasKey("Music")){
+            savedVolume = PlayerPrefs.GetFloat("Music");
+            Debug.Log("Received value " + savedVolume);
+            SetVolume("Music", savedVolume);
+        } else {
+            Debug.Log("Does not exist music key");
+        }
+        */
     }
     public void onValueChanged(){
         float sliderVal = slideThing.value;
@@ -33,14 +46,16 @@ public class SliderScript : MonoBehaviour
         } else {
             volumeSetting = Mathf.Log10(slideThing.value) * 20;
         }
+        Debug.Log("Setting volume to " + volumeSetting);
         SetVolume("Master", volumeSetting);
-        SetVolume("Music", volumeSetting);
-        //float adjustedVolume = Mathf.Abs((volumeSetting / -80f) - 1f);
+        //SetVolume("Music", volumeSetting);
         float adjustedVolume = handle.anchorMin.x;
         volumeLevel.text = adjustedVolume.ToString();
     }
 
     void SetVolume(string name, float value){
+        //Debug.Log("")
+        //Debug.Log("Setting mixer to " + value + " from " + code);
         PlayerPrefs.SetFloat(name, value);
         mixer.SetFloat(name, value);
     }

@@ -8,6 +8,7 @@ public enum BattleState { START, PLAYERTURN, ENEMYTURN, WON, LOST }
 
 public class BattleSystem : MonoBehaviour
 {
+    [SerializeField] Animator transition;
     [SerializeField] GameObject playerPrefab;
     [SerializeField] GameObject enemyPrefab;
 
@@ -230,7 +231,9 @@ public class BattleSystem : MonoBehaviour
             soundSystem.PlayGameLoserSound();
             UpdateDialogueText("Womp womp, you lost !");
         }
-        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
+        transition.SetTrigger("Start");
+        yield return new WaitForSeconds(1f); // 1f for transition time
         SceneManager.LoadScene("MainMenuScene");
     }
 }

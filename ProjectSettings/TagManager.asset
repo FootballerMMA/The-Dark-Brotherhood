@@ -11,7 +11,7 @@ TagManager:
   - 
   - Water
   - UI
-  - 
+  - Transition
   - 
   - 
   - 
@@ -38,6 +38,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: Infront
+    uniqueID: 491848753
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
