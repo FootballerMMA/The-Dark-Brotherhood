@@ -33,7 +33,6 @@ public class BattleSystem : MonoBehaviour
     [SerializeField] SoundManager soundSystem;
 
     [SerializeField] CardsSelected cardSelectedSystem;
-    [SerializeField] randomscript rs;
 
     System.Random rnd = new System.Random();
     void Start()
@@ -91,7 +90,6 @@ public class BattleSystem : MonoBehaviour
         state = BattleState.PLAYERTURN;
         updateCards();
         soundSystem.PlayCardRevealSound();
-        rs.SpawnCard();
     }
     void PlayerTurn() { UpdateDialogueText("Choose an attack!"); }
     public void Card0() { OnCardButton(0); }

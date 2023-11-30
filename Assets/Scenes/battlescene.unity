@@ -467,7 +467,6 @@ GameObject:
   - component: {fileID: 330687264}
   - component: {fileID: 330687263}
   - component: {fileID: 330687266}
-  - component: {fileID: 330687267}
   m_Layer: 0
   m_Name: BattleSystem
   m_TagString: Untagged
@@ -500,7 +499,7 @@ MonoBehaviour:
   cardTexts: {fileID: 330687264}
   soundSystem: {fileID: 1208368969}
   cardSelectedSystem: {fileID: 330687266}
-  rs: {fileID: 330687267}
+  rs: {fileID: 0}
 --- !u!4 &330687262
 Transform:
   m_ObjectHideFlags: 0
@@ -587,20 +586,6 @@ MonoBehaviour:
   fireSprite: {fileID: 21300000, guid: c7b72bfe8e4eee94d803992545527b5a, type: 3}
   waterSprite: {fileID: 21300000, guid: 4bc52d2221d50d845a92ceb5a58e4c69, type: 3}
   cardBackSprite: {fileID: 21300000, guid: 8337af86ef48e40419eebde23cde21fc, type: 3}
---- !u!114 &330687267
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 330687260}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c658e0fa42633ff4f94237e4baeace15, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  cardSprite: {fileID: 21300000, guid: 4bc52d2221d50d845a92ceb5a58e4c69, type: 3}
-  spawnDuration: 2
 --- !u!1 &338117250
 GameObject:
   m_ObjectHideFlags: 0
